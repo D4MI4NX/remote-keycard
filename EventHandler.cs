@@ -1,11 +1,6 @@
-using System.Linq;
-using Exiled.API;
-using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Permissions.Extensions;
-using UnityEngine;
 using Players = Exiled.Events.Handlers.Player;
 
 namespace RemoteKeycard
@@ -31,6 +26,15 @@ namespace RemoteKeycard
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
         {
+            if (ev.Player.CurrentItem is Keycard)
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info("Player is holding a card");
+                }
+                return;
+            }
+
             foreach (Item i in ev.Player.Items.ToArray())
             {
                 if (!i.IsKeycard)
@@ -50,8 +54,19 @@ namespace RemoteKeycard
                 
                 if (Utils.RemoteKeycard.KeycardHasPermissionForDoor(keycard, ev.Door))
                 {
+                    if (p.Config.Debug)
+                    {
+                        Log.Info(string.Format("Opening door {0}", ev.Door.Name));
+                    }
                     ev.Door.IsOpen = !ev.Door.IsOpen;
                     return;
+                }
+                else
+                {
+                    if (p.Config.Debug)
+                    {
+                        Log.Info(string.Format("NOT Opening door {0}", ev.Door.Name));
+                    }
                 }
             }
         }
