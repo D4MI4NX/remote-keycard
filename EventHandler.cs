@@ -48,11 +48,7 @@ namespace RemoteKeycard
                     Log.Info(string.Format("Perm: {0}", ((int)keycard.Permissions)));
                 }
                 
-
-                int doorPerm = ((int)ev.Door.KeycardPermissions);
-                int cardPerm = ((int)keycard.Permissions);
-
-                if ((doorPerm & cardPerm) != 0)
+                if (Utils.RemoteKeycard.KeycardHasPermissionForDoor(keycard, ev.Door))
                 {
                     ev.Door.IsOpen = !ev.Door.IsOpen;
                     return;
