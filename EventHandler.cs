@@ -1,7 +1,9 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
+using RemoteKeycard.Extensions;
 using Players = Exiled.Events.Handlers.Player;
+using Exiled.API.Enums;
 
 namespace RemoteKeycard
 {
@@ -17,56 +19,54 @@ namespace RemoteKeycard
         public void Start()
         {
             Players.InteractingDoor += OnDoorInteraction;
+            Players.InteractingLocker += OnLockerInteraction;
         }
 
         public void Stop()
         {
-            
+            Players.InteractingDoor -= OnDoorInteraction;
+            Players.InteractingLocker -= OnLockerInteraction;
         }
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
         {
-            if (ev.Player.CurrentItem is Keycard)
+            if (ev.Door.IsLocked || ((int)ev.Door.RequiredPermissions.RequiredPermissions) == 0)
             {
-                if (p.Config.Debug)
-                {
-                    Log.Info("Player is holding a card");
-                }
                 return;
             }
 
-            foreach (Item i in ev.Player.Items.ToArray())
+            if (ev.Player.HasPermissionFor(ev.Door.RequiredPermissions.RequiredPermissions))
             {
-                if (!i.IsKeycard)
-                {
-                    continue;
-                }
-
-                var keycard = (Keycard)i;
-
                 if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("Door: {0}", ev.Door.RequiredPermissions.RequiredPermissions));
-                    Log.Info(string.Format("Perm: {0}", ((int)ev.Door.KeycardPermissions)));
-                    Log.Info(string.Format("Card: {0}", keycard.Permissions));
-                    Log.Info(string.Format("Perm: {0}", ((int)keycard.Permissions)));
-                }
-                
-                if (Utils.RemoteKeycard.KeycardHasPermissionForDoor(keycard, ev.Door))
-                {
-                    if (p.Config.Debug)
                     {
                         Log.Info(string.Format("Opening door {0}", ev.Door.Name));
                     }
-                    ev.Door.IsOpen = !ev.Door.IsOpen;
-                    return;
-                }
-                else
+                    ev.IsAllowed = true;
+            }
+            else
+            {
+                if (p.Config.Debug)
                 {
-                    if (p.Config.Debug)
-                    {
-                        Log.Info(string.Format("NOT Opening door {0}", ev.Door.Name));
-                    }
+                    Log.Info(string.Format("NOT Opening door {0}", ev.Door.Name));
+                }
+            }
+        }
+
+        public void OnLockerInteraction(InteractingLockerEventArgs ev)
+        {
+            if (ev.Player.HasPermissionFor(ev.Chamber.RequiredPermissions))
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info(string.Format("Opening door {0}", ev.Chamber.name));
+                }
+                ev.IsAllowed = true;
+            }
+            else
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info(string.Format("NOT Opening door {0}", ev.Chamber.name));
                 }
             }
         }
