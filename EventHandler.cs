@@ -1,5 +1,4 @@
 using Exiled.API.Features;
-using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using RemoteKeycard.Extensions;
 using Players = Exiled.Events.Handlers.Player;
