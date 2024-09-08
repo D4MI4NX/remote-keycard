@@ -18,10 +18,22 @@ namespace RemoteKeycard
 
         public void Start()
         {
-            Players.InteractingDoor += OnDoorInteraction;
-            Players.InteractingLocker += OnLockerInteraction;
-            Players.UnlockingGenerator += OnGeneratorInteraction;
-            Players.ActivatingWarheadPanel += OnWarheadInteraction;
+            if (p.Config.Doors)
+            {
+                Players.InteractingDoor += OnDoorInteraction;
+            }
+            if (p.Config.Lockers)
+            {
+                Players.InteractingLocker += OnLockerInteraction;
+            }
+            if (p.Config.Generators)
+            {
+                Players.UnlockingGenerator += OnGeneratorInteraction;
+            }
+            if (p.Config.Warhead)
+            {
+                Players.ActivatingWarheadPanel += OnWarheadInteraction;
+            }
         }
 
         public void Stop()
