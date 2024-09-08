@@ -21,6 +21,7 @@ namespace RemoteKeycard
             Players.InteractingDoor += OnDoorInteraction;
             Players.InteractingLocker += OnLockerInteraction;
             Players.UnlockingGenerator += OnGeneratorInteraction;
+            Players.ActivatingWarheadPanel += OnWarheadInteraction;
         }
 
         public void Stop()
@@ -28,6 +29,7 @@ namespace RemoteKeycard
             Players.InteractingDoor -= OnDoorInteraction;
             Players.InteractingLocker -= OnLockerInteraction;
             Players.UnlockingGenerator -= OnGeneratorInteraction;
+            Players.ActivatingWarheadPanel -= OnWarheadInteraction;
         }
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
@@ -88,6 +90,25 @@ namespace RemoteKeycard
                 if (p.Config.Debug)
                 {
                     Log.Info(string.Format("NOT unlocking generator in {0}", ev.Generator.Room.Name));
+                }
+            }
+        }
+
+        public void OnWarheadInteraction(ActivatingWarheadPanelEventArgs ev)
+        {
+            if (ev.Player.HasPermissionFor(KeycardPermissions.AlphaWarhead))
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info("Unlocking alpha warhead");
+                }
+                ev.IsAllowed = true;
+            }
+            else
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info("NOT unlocking alpha warhead");
                 }
             }
         }
