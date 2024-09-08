@@ -3,7 +3,7 @@ using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using RemoteKeycard.Extensions;
 using Players = Exiled.Events.Handlers.Player;
-using Exiled.API.Enums;
+using Interactables.Interobjects.DoorUtils;
 
 namespace RemoteKeycard
 {
@@ -20,12 +20,14 @@ namespace RemoteKeycard
         {
             Players.InteractingDoor += OnDoorInteraction;
             Players.InteractingLocker += OnLockerInteraction;
+            Players.UnlockingGenerator += OnGeneratorInteraction;
         }
 
         public void Stop()
         {
             Players.InteractingDoor -= OnDoorInteraction;
             Players.InteractingLocker -= OnLockerInteraction;
+            Players.UnlockingGenerator -= OnGeneratorInteraction;
         }
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
@@ -58,7 +60,7 @@ namespace RemoteKeycard
             {
                 if (p.Config.Debug)
                 {
-                    Log.Info(string.Format("Opening door {0}", ev.Chamber.name));
+                    Log.Info(string.Format("Opening locker {0}", ev.Chamber.name));
                 }
                 ev.IsAllowed = true;
             }
@@ -66,7 +68,26 @@ namespace RemoteKeycard
             {
                 if (p.Config.Debug)
                 {
-                    Log.Info(string.Format("NOT Opening door {0}", ev.Chamber.name));
+                    Log.Info(string.Format("NOT Opening locker {0}", ev.Chamber.name));
+                }
+            }
+        }
+
+        public void OnGeneratorInteraction(UnlockingGeneratorEventArgs ev)
+        {
+            if (ev.Player.HasPermissionFor((KeycardPermissions)ev.Generator.KeycardPermissions))
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info(string.Format("Unlocking generator in {0}", ev.Generator.Room.Name));
+                }
+                ev.IsAllowed = true;
+            }
+            else
+            {
+                if (p.Config.Debug)
+                {
+                    Log.Info(string.Format("NOT unlocking generator in {0}", ev.Generator.Room.Name));
                 }
             }
         }
