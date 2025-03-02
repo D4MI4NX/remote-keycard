@@ -81,11 +81,11 @@ namespace RemoteKeycard
 
         public void OnLockerInteraction(InteractingLockerEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor(ev.Chamber.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((KeycardPermissions)ev.InteractingChamber.RequiredPermissions))
             {
                 if (p.Config.Debug)
                 {
-                    Log.Info(string.Format("Opening locker {0}", ev.Chamber.name));
+                    Log.Info(string.Format("Opening locker {0}", ev.InteractingChamber.Locker.Room.Name));
                 }
                 ev.IsAllowed = true;
             }
@@ -93,7 +93,7 @@ namespace RemoteKeycard
             {
                 if (p.Config.Debug)
                 {
-                    Log.Info(string.Format("NOT Opening locker {0}", ev.Chamber.name));
+                    Log.Info(string.Format("NOT Opening locker {0}", ev.InteractingChamber.Locker.Room.Name));
                 }
             }
         }

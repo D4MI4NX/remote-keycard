@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EXILED" Version="8.9.11" />
+    <PackageReference Include="ExMod.Exiled" Version="9.5.1" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>libs/Unity/UnityEngine.CoreModule.dll</HintPath>
     </Reference>
