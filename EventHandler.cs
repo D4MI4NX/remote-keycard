@@ -3,6 +3,7 @@ using Exiled.Events.EventArgs.Player;
 using RemoteKeycard.Extensions;
 using Players = Exiled.Events.Handlers.Player;
 using Interactables.Interobjects.DoorUtils;
+using Exiled.API.Enums;
 
 namespace RemoteKeycard
 {
@@ -57,12 +58,12 @@ namespace RemoteKeycard
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
         {
-            if (ev.Door.IsLocked || ((int)ev.Door.RequiredPermissions.RequiredPermissions) == 0)
+            if (ev.Door.IsLocked || ev.Door.RequiredPermissions == 0)
             {
                 return;
             }
 
-            if (ev.Player.HasPermissionFor(ev.Door.RequiredPermissions.RequiredPermissions))
+            if (ev.Player.HasPermissionFor(ev.Door.RequiredPermissions))
             {
                 if (p.Config.Debug)
                     {
@@ -81,7 +82,7 @@ namespace RemoteKeycard
 
         public void OnLockerInteraction(InteractingLockerEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((KeycardPermissions)ev.InteractingChamber.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((DoorPermissionFlags)ev.InteractingChamber.RequiredPermissions))
             {
                 if (p.Config.Debug)
                 {
@@ -100,7 +101,7 @@ namespace RemoteKeycard
 
         public void OnGeneratorInteraction(UnlockingGeneratorEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((KeycardPermissions)ev.Generator.KeycardPermissions))
+            if (ev.Player.HasPermissionFor((DoorPermissionFlags)ev.Generator.KeycardPermissions))
             {
                 if (p.Config.Debug)
                 {
@@ -119,7 +120,7 @@ namespace RemoteKeycard
 
         public void OnWarheadInteraction(ActivatingWarheadPanelEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor(KeycardPermissions.AlphaWarhead))
+            if (ev.Player.HasPermissionFor((DoorPermissionFlags)KeycardPermissions.AlphaWarhead))
             {
                 if (p.Config.Debug)
                 {

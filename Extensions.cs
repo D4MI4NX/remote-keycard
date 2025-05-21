@@ -6,9 +6,9 @@ namespace RemoteKeycard.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool HasPermissionFor(this Player player, KeycardPermissions kp)
+        public static bool HasPermissionFor(this Player player, DoorPermissionFlags dp)
         {
-            int kpPerm = (int)kp;
+            int doorPermInt = (int)dp;
 
             foreach (Item i in player.Items.ToArray())
             {
@@ -19,9 +19,9 @@ namespace RemoteKeycard.Extensions
 
                 var keycard = (Keycard)i;
 
-                int keyPerm = ((int)keycard.Permissions);
+                int keyPerm = (int)keycard.Permissions;
 
-                if (((int)kp & keyPerm) != 0)
+                if ((doorPermInt & keyPerm) != 0)
                 {
                     return true;
                 }

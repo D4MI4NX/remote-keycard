@@ -10,9 +10,9 @@ namespace RemoteKeycard
         
         public override string Author => "D4MI4NX";
         
-        public override Version Version => new(1, 1, 0);
+        public override Version Version => new(1, 2, 0);
         
-        public override Version RequiredExiledVersion => new(9, 5, 1);
+        public override Version RequiredExiledVersion => new(9, 6, 0);
 
 
         public GenHandler Handler { get; private set; }
