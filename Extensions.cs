@@ -21,7 +21,7 @@ namespace RemoteKeycard.Extensions
 
                 int keyPerm = (int)keycard.Permissions;
 
-                if ((doorPermInt & keyPerm) != 0)
+                if ((doorPermInt & keyPerm) == doorPermInt)
                 {
                     return true;
                 }
