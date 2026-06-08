@@ -1,21 +1,22 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using Interactables.Interobjects.DoorUtils;
 
 namespace RemoteKeycard.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool HasPermissionFor(this Player player, DoorPermissionFlags doorPermFlags)
+        public static bool HasPermissionFor(this Player player, ushort doorPerm)
         {
+            if (doorPerm == 0) {
+                return true;
+            }
+
             foreach (Item i in player.Items.ToArray())
             {
                 if (!i.IsKeycard)
                 {
                     continue;
                 }
-
-                ushort doorPerm = (ushort)doorPermFlags;
 
                 Keycard keycard = (Keycard)i;
                 ushort keycardPerm = (ushort)keycard.Permissions;

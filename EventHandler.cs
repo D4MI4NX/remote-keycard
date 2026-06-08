@@ -2,7 +2,6 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using RemoteKeycard.Extensions;
 using Players = Exiled.Events.Handlers.Player;
-using Interactables.Interobjects.DoorUtils;
 using Exiled.API.Enums;
 
 namespace RemoteKeycard
@@ -58,83 +57,43 @@ namespace RemoteKeycard
 
         public void OnDoorInteraction(InteractingDoorEventArgs ev)
         {
-            if (ev.Door.IsLocked || ev.Door.RequiredPermissions == 0)
+            if (ev.Door.IsLocked)
             {
                 return;
             }
 
-            if (ev.Player.HasPermissionFor(ev.Door.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.Door.RequiredPermissions))
             {
-                if (p.Config.Debug)
-                    {
-                        Log.Info(string.Format("Opening door {0}", ev.Door.Name));
-                    }
-                    ev.IsAllowed = true;
+                ev.IsAllowed = true;
             }
-            else
-            {
-                if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("NOT Opening door {0}", ev.Door.Name));
-                }
-            }
+            Log.Debug($"Open door {ev.Door.Name} status {ev.IsAllowed}");
         }
 
         public void OnLockerInteraction(InteractingLockerEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((DoorPermissionFlags)ev.InteractingChamber.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.InteractingChamber.RequiredPermissions))
             {
-                if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("Opening locker {0}", ev.InteractingChamber.Locker.Room.Name));
-                }
                 ev.IsAllowed = true;
             }
-            else
-            {
-                if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("NOT Opening locker {0}", ev.InteractingChamber.Locker.Room.Name));
-                }
-            }
+            Log.Debug($"Open locker in {ev.InteractingChamber.Locker.Room.Name} status {ev.IsAllowed}");
         }
 
         public void OnGeneratorInteraction(UnlockingGeneratorEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((DoorPermissionFlags)ev.Generator.KeycardPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.Generator.KeycardPermissions))
             {
-                if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("Unlocking generator in {0}", ev.Generator.Room.Name));
-                }
                 ev.IsAllowed = true;
             }
-            else
-            {
-                if (p.Config.Debug)
-                {
-                    Log.Info(string.Format("NOT unlocking generator in {0}", ev.Generator.Room.Name));
-                }
-            }
+            Log.Debug($"Unlock generator in {ev.Generator.Room.Name} status {ev.IsAllowed}");
         }
 
         public void OnWarheadInteraction(ActivatingWarheadPanelEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((DoorPermissionFlags)KeycardPermissions.AlphaWarhead))
+            if (ev.Player.HasPermissionFor((ushort)KeycardPermissions.AlphaWarhead))
             {
-                if (p.Config.Debug)
-                {
-                    Log.Info("Unlocking alpha warhead");
-                }
                 ev.IsAllowed = true;
             }
-            else
-            {
-                if (p.Config.Debug)
-                {
-                    Log.Info("NOT unlocking alpha warhead");
-                }
-            }
+            Log.Debug($"Unlock alpha warhead status {ev.IsAllowed}");
         }
     }
 }
