@@ -1,11 +1,12 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Items.Keycards;
 
 namespace RemoteKeycard.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool HasPermissionFor(this Player player, ushort doorPerm)
+        public static bool HasPermissionFor(this Player player, ushort doorPerm, bool allowSingleUseKeycards)
         {
             if (doorPerm == 0) {
                 return true;
@@ -19,6 +20,13 @@ namespace RemoteKeycard.Extensions
                 }
 
                 Keycard keycard = (Keycard)i;
+
+                bool isSingleUseKeycard = keycard.Type == ItemType.SurfaceAccessPass;
+
+                if (!allowSingleUseKeycards && isSingleUseKeycard) {
+                    continue;
+                }
+
                 ushort keycardPerm = (ushort)keycard.Permissions;
 
                 // Fixes
@@ -38,6 +46,12 @@ namespace RemoteKeycard.Extensions
 
                 if (result == doorPerm)
                 {
+                    if (isSingleUseKeycard) {
+                        SingleUseKeycard card = (SingleUseKeycard)keycard;
+                        // TODO: implement AllowClosingDoors logic
+                        card.Uses--;
+                        Log.Debug($"Used single use keycard, now {card.Uses} uses");
+                    }
                     return true;
                 }
             }

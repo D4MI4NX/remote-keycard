@@ -62,7 +62,7 @@ namespace RemoteKeycard
                 return;
             }
 
-            if (ev.Player.HasPermissionFor((ushort)ev.Door.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.Door.RequiredPermissions, p.Config.AllowSingleUseKeycards))
             {
                 ev.IsAllowed = true;
             }
@@ -71,7 +71,7 @@ namespace RemoteKeycard
 
         public void OnLockerInteraction(InteractingLockerEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((ushort)ev.InteractingChamber.RequiredPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.InteractingChamber.RequiredPermissions, p.Config.AllowSingleUseKeycards))
             {
                 ev.IsAllowed = true;
             }
@@ -80,7 +80,7 @@ namespace RemoteKeycard
 
         public void OnGeneratorInteraction(UnlockingGeneratorEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((ushort)ev.Generator.KeycardPermissions))
+            if (ev.Player.HasPermissionFor((ushort)ev.Generator.KeycardPermissions, p.Config.AllowSingleUseKeycards))
             {
                 ev.IsAllowed = true;
             }
@@ -89,7 +89,7 @@ namespace RemoteKeycard
 
         public void OnWarheadInteraction(ActivatingWarheadPanelEventArgs ev)
         {
-            if (ev.Player.HasPermissionFor((ushort)KeycardPermissions.AlphaWarhead))
+            if (ev.Player.HasPermissionFor((ushort)KeycardPermissions.AlphaWarhead, p.Config.AllowSingleUseKeycards))
             {
                 ev.IsAllowed = true;
             }
