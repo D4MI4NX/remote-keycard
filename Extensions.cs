@@ -6,7 +6,7 @@ namespace RemoteKeycard.Extensions
 {
     public static class PlayerExtensions
     {
-        public static bool HasPermissionFor(this Player player, ushort doorPerm, bool allowSingleUseKeycards)
+        public static bool HasPermissionFor(this Player player, ushort doorPerm, bool allowSingleUseKeycards, bool doorIsOpen)
         {
             if (doorPerm == 0) {
                 return true;
@@ -48,9 +48,13 @@ namespace RemoteKeycard.Extensions
                 {
                     if (isSingleUseKeycard) {
                         SingleUseKeycard card = (SingleUseKeycard)keycard;
-                        // TODO: implement AllowClosingDoors logic
-                        card.Uses--;
-                        Log.Debug($"Used single use keycard, now {card.Uses} uses");
+                        if (!doorIsOpen || (doorIsOpen && card.AllowClosingDoors))
+                        {
+                            card.Uses--;
+                            Log.Debug($"Used single use keycard, now {card.Uses} uses");
+                        } else {
+                            continue;
+                        }
                     }
                     return true;
                 }
