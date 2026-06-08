@@ -10,7 +10,7 @@ namespace RemoteKeycard
 
         public override string Author => "D4MI4NX";
 
-        public override Version Version => new(1, 3, 0);
+        public override Version Version => new(1, 4, 0);
 
         public override Version RequiredExiledVersion => new(9, 14, 0);
 
