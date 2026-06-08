@@ -12,7 +12,7 @@ namespace RemoteKeycard
 
         public override Version Version => new(1, 3, 0);
 
-        public override Version RequiredExiledVersion => new(9, 6, 0);
+        public override Version RequiredExiledVersion => new(9, 14, 0);
 
 
         public GenHandler Handler { get; private set; }
